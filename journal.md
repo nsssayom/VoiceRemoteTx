@@ -28,4 +28,4 @@ Finished up initializing git repo.
 
 ### 1:30 PM
 
-Hardware implemented and transmitter code in ported for new setup
+Hardware implemented and transmitter code is ported for new setup
