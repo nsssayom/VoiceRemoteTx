@@ -25,3 +25,7 @@ Installation complete but unable to upload code. Fixed using the following comma
 ### 11:16 AM
 
 Finished up initializing git repo.
+
+### 1:30 PM
+
+Hardware implemented and transmitter code in ported for new setup
