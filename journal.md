@@ -10,7 +10,7 @@ Arduino IDE is not well suited for this scale of project. I am looking for alter
 
 Selected [Platform IO](https://platformio.org/) to be used with VS Code. Installing it along with all the dependencies.
 
-Ardiono IDE is also one of its dependency. And installed it from Snapcraft using following command:
+Arduino IDE is also one of its dependency. And installed it from SnapCraft using following command:
 
 `$ sudo snap install arduino`.
 
@@ -21,3 +21,7 @@ Installation complete but unable to upload code. Fixed using the following comma
 `$ sudo usermod -a -G dialout $USER`
 
 `$ arduino.pip install requests`
+
+### 11:16 AM
+
+Finished up initializing git repo.
