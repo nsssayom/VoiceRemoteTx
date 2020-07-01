@@ -50,6 +50,33 @@ The microphone (or preamp) out should be connected to A0 pin of the Arduino.
 | Output | AO |
 | GND | GND |
 
+## Loading Sketch
+
+> This project is developed and tested in Debian Buster machine. For all standard Debian and ubuntu based systems following instructions are expected to work.
+
+
+### Install VS Code
+
+Use [Snap] (https://snapcraft.io/code) to install VS Code if not installed already.
+```bash
+$ sudo snap install code --classic
+```
+
+If your system does not have snap installed already, install it.
+
+```bash
+$ sudo apt update
+$ sudo apt install snapd
+```
+
+### Install PlatformIO
+
+PlatformIO was used for smoother development and debugging features. It has all the necessary tool-chains for embedded system development. Install the [PlatformIO extension](https://marketplace.visualstudio.com/items?itemName=platformio.platformio-ide) for VS Code. 
+
+Launch VS Code Quick Open (Ctrl+P), paste the following command, and press enter.
+```
+ext install platformio.platformio-ide
+```
 
 ___
 <a name="footnote1">1</a>: Declared in code
