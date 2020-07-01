@@ -71,21 +71,13 @@ $ sudo apt install snapd
 
 ### Install PlatformIO
 
-PlatformIO was used for smoother development and debugging features. It has all the necessary tool-chains for embedded system development. Install the [PlatformIO extension](https://marketplace.visualstudio.com/items?itemName=platformio.platformio-ide) for VS Code. 
+PlatformIO was used for smoother development and debugging features. It has all the necessary tool-chains for embedded system development. Install the [PlatformIO extension](https://marketplace.visualstudio.com/items?itemName=platformio.platformio-ide) for VS Code.
 
-Launch VS Code Quick Open (Ctrl+P), paste the following command, and press enter.
+Launch VS Code Quick Open ( <kbd>Ctrl</kbd> + <kbd>P</kbd> ), paste the following command, and press enter.
+
 ```bash
 ext install platformio.platformio-ide
 ```
-
-### Identifying Serial Port 
-
-Plugin the Arduino USB cable in a USB port and issue following command:
-
-```bash
-$ dmesg | grep tty
-```
-The last line of the output should contain the name of the serial port. It should be something like __ttyACM0__  or __ttyUSB0__.
 
 ### Configuring PlatformIO  
 
@@ -94,9 +86,10 @@ Plug in the Arduino USB cable in a USB port and issue following command:
 ```bash
 $ dmesg | grep tty
 ```
-The last line of the output should contain the name of the serial port the arduino is connected to. It should be something like __ttyACM0__  or __ttyUSB0__.
 
-Now navigate to __platformio.ini__ file located in the project root directory and set the upload_port and monitor_port to the serial port name the Arduino is connected to.
+The last line of the output should contain the name of the serial port the arduino is connected to. It should be something like `ttyACM0`  or `ttyUSB0`.
+
+Now navigate to __platformio.ini__ file located in the project root directory and set the `upload_port` and `monitor_port` to the serial port name the Arduino is connected to.
 
 Example:
 
@@ -109,7 +102,17 @@ upload_port = /dev/ttyUSB0
 monitor_port = /dev/ttyUSB0
 monitor_speed = 115200
 ```
+
+Follow the [official documentation](https://docs.platformio.org/en/latest/integration/ide/vscode.html) of platformIO if necessary.
+
+### Upload Sketch
+
+Upon connecting the board and configuring it correctly, Open VS Code command pallette with pressing <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd>.
+
+Use the `PlatformIO: Upload` command to upload the code to the board.
 ___
+##### Footnotes
+
 <a name="footnote1">1</a>: Declared in code
 
 <a name="footnote2">2</a>: Originally D10 was used. But that pin was damaged later.
