@@ -52,12 +52,12 @@ The microphone (or preamp) out should be connected to A0 pin of the Arduino.
 
 ## Loading Sketch
 
-> This project is developed and tested in Debian Buster machine. For all standard Debian and ubuntu based systems following instructions are expected to work.
+> This project is developed and tested in Debian Buster machine. For all standard Debian and Ubuntu based systems following instructions are expected to work.
 
 
 ### Install VS Code
 
-Use [Snap] (https://snapcraft.io/code) to install VS Code if not installed already.
+Use [Snap](https://snapcraft.io/code) to install VS Code if not installed already.
 ```bash
 $ sudo snap install code --classic
 ```
