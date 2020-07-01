@@ -113,6 +113,5 @@ Use the `PlatformIO: Upload` command to upload the code to the board.
 ___
 ##### Footnotes
 
-<a name="footnote1">1</a>: Declared in code
-
+<a name="footnote1">1</a>: Declared in code</br>
 <a name="footnote2">2</a>: Originally D10 was used. But that pin was damaged later.
