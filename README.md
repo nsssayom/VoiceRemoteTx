@@ -74,10 +74,41 @@ $ sudo apt install snapd
 PlatformIO was used for smoother development and debugging features. It has all the necessary tool-chains for embedded system development. Install the [PlatformIO extension](https://marketplace.visualstudio.com/items?itemName=platformio.platformio-ide) for VS Code. 
 
 Launch VS Code Quick Open (Ctrl+P), paste the following command, and press enter.
-```
+```bash
 ext install platformio.platformio-ide
 ```
 
+### Identifying Serial Port 
+
+Plugin the Arduino USB cable in a USB port and issue following command:
+
+```bash
+$ dmesg | grep tty
+```
+The last line of the output should contain the name of the serial port. It should be something like __ttyACM0__  or __ttyUSB0__.
+
+### Configuring PlatformIO  
+
+Plug in the Arduino USB cable in a USB port and issue following command:
+
+```bash
+$ dmesg | grep tty
+```
+The last line of the output should contain the name of the serial port the arduino is connected to. It should be something like __ttyACM0__  or __ttyUSB0__.
+
+Now navigate to __platformio.ini__ file located in the project root directory and set the upload_port and monitor_port to the serial port name the Arduino is connected to.
+
+Example:
+
+```ini
+[env:nanoatmega328]
+platform = atmelavr
+board = nanoatmega328
+framework = arduino
+upload_port = /dev/ttyUSB0
+monitor_port = /dev/ttyUSB0
+monitor_speed = 115200
+```
 ___
 <a name="footnote1">1</a>: Declared in code
 
