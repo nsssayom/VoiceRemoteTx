@@ -40,5 +40,7 @@ Keypad pins will be connected with the following arduino pins:
 | C2 | D3 |
 | C3 | D4 |
 
-<a name="footnote1">1</a>: Declared in code
+___
+<a name="footnote1">1</a>: Declared in code <br>
+
 <a name="footnote2">2</a>: Originally D10 was used. But that pin was damaged later.
