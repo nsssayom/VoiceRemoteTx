@@ -21,6 +21,7 @@ For the Tx module of this project, pins of nRF24L01 module will be connected to 
 | SCK | 13 | 52 |
 | MOSI | 11 | 51 |
 | MISO | 12 | 50 |
+| IRQ | Not Connected | Not Connected |
 
 ### Interfacing the Keypad with MCU
 
@@ -40,7 +41,17 @@ Keypad pins will be connected with the following arduino pins:
 | C2 | D3 |
 | C3 | D4 |
 
+### Interfacing Microphone Module with MCU
+
+The microphone (or preamp) out should be connected to A0 pin of the Arduino.
+
+| Microphone (or Preamp) Pin | Arduino Pin |
+|--|--|
+| Output | AO |
+| GND | GND |
+
+
 ___
-<a name="footnote1">1</a>: Declared in code <br>
+<a name="footnote1">1</a>: Declared in code
 
 <a name="footnote2">2</a>: Originally D10 was used. But that pin was damaged later.
