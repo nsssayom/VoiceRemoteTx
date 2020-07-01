@@ -1,149 +1,221 @@
+/*
+ Written by Sayom, Nazmus Shakib <nsssayom@gmail.com>
+ for Rise Up Labs
+
+ This program is firmware for a wireless remote control System
+ based on 2.4 GHZ Radio. Along with key press this system is
+ capable of transmitting audio command.
+
+ */
+
 #include <RF24.h>
-#include <SPI.h>
-#include "nRF24L01.h"
-#include "RF24Audio.h"
-#include "printf.h"                         // General includes for radio and audio lib
+#include <SPI.h>	   // SPI Library for nRF24L01
+#include "nRF24L01.h"  // Radio hardware library
+#include "RF24Audio.h" // Audio library
+#include "printf.h"	   // General includes for radio and audio lib
+#include "Keypad.h"	   // Keypad library for 3x4 analog matrix keypad
+/*
+	Defining ASCII characters to be used in headers 
+*/
 
-#define STX                 0x02            //START OF TEXT
-#define ETX                 0x03            //END OF TEXT
-#define EOT                 0x04            //END OF TRANSMISSION
+#define STX 0x02 //START OF TEXT
+#define ETX 0x03 //END OF TEXT
+#define EOT 0x04 //END OF TRANSMISSION
 
-RF24 radio(7, 8);                           // Set radio up using pins 7 (CE) 8 (CS)
-RF24Audio rfAudio(radio, 1);                // Set up the audio using the radio, and set to radio number 0
+/*
+	Initializing radio and audio hardwares
+*/
 
-/***** Voice IOs *****/
-const byte btnVoiceToggle = 3;
-const byte ledVoiceToggle = 4;
+RF24 radio(7, 8);			 // Set radio up using pins 7 (CE) 8 (CS)
+RF24Audio rfAudio(radio, 1); // Set up the audio using the radio, and set to radio number 0
+
+/*
+	Initializing keypad 
+*/
+
+const byte rows = 4; //four rows
+const byte cols = 3; //three columns
+char keys[rows][cols] = {
+	{'1', '2', '3'},
+	{'4', '5', '6'},
+	{'7', '8', '9'},
+	{'*', '0', '#'}};
+byte rowPins[rows] = {9, A4, 5, 6}; //connect to the row pinouts of the keypad
+byte colPins[cols] = {2, 3, 4};		//connect to the column pinouts of the keypad
+Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, rows, cols);
+
+/*
+	Flag variable to indicate audio transmission 
+*/
+
 volatile byte voiceState = LOW;
-volatile byte buttonCleared = HIGH;
 
-const byte btnX = A1;
-const byte btnY = A2;
-const byte btnA = A3;
-const byte btnB = A4;
+/*
+	Function for commensing audio transmission 
+*/
 
+void StartAudioStransmission()
+{
+	Serial.println("Transmission Starting...");
+	rfAudio.transmit();
 
-void setup() {
-  Serial.begin(115200);         // Enable Arduino serial library
+	const String buttonString = "...............................";
+	char buttonStateBuff[32];
+	buttonString.toCharArray(buttonStateBuff, 32);
+	buttonStateBuff[0] = STX;
+	radio.write(buttonStateBuff, 32);
+	delay(20);
 
-  printf_begin();               // Radio library uses printf to output debug info
-  radio.begin();                // Must start the radio here, only if we want to print debug info
-  rfAudio.begin();              // Start up the radio and audio libararies
-  
-  pinMode(btnVoiceToggle, INPUT);
-  
-  pinMode(btnX, INPUT_PULLUP);
-  pinMode(btnY, INPUT_PULLUP);
-  pinMode(btnA, INPUT_PULLUP);
-  pinMode(btnB, INPUT_PULLUP);
-  
-  pinMode(ledVoiceToggle, OUTPUT);
-  digitalWrite(ledVoiceToggle, LOW);
-  attachInterrupt(digitalPinToInterrupt(btnVoiceToggle), transmitAudio, CHANGE);
+	rfAudio.broadcast(1);
+	return;
 }
 
-void transmitAudio(){
-  voiceState = !voiceState;
-    if (voiceState){
-      Serial.println("Transmission Starting...");
-      digitalWrite(ledVoiceToggle, HIGH);
-      rfAudio.transmit();
-      
-      const String buttonString = "...............................";
-      char buttonStateBuff[32];
-      buttonString.toCharArray(buttonStateBuff, 32);
-      buttonStateBuff[0] = STX;
-      //buttonStateBuff[30] = EOT;
-      radio.write(buttonStateBuff, 32);
-      delay(20);
-      
-      rfAudio.broadcast(1);
-      return;
-  }
-  else{
-    Serial.println("Transmission Terminating...");
-    rfAudio.receive();
-    delay(20);
-    
-    const String buttonString = "...............................";
-    char buttonStateBuff[32];
-    buttonString.toCharArray(buttonStateBuff, 32);
-    //buttonStateBuff[0] = STX;
-    buttonStateBuff[30] = EOT;
-    
-    rfAudio.transmit();
-    radio.write(buttonStateBuff, 32);
-    
-    digitalWrite(ledVoiceToggle, LOW);
-    rfAudio.receive();
-    return;
-  }
+/*
+	Function to stop audio transmission 
+*/
+
+void EndAudioTransmission()
+{
+	Serial.println("Transmission Terminating...");
+	rfAudio.receive();
+	delay(20);
+
+	/*
+		Audio transmission header is EOT..............................
+		Audio signal will be followed by this character sequence.
+	*/
+
+	const String buttonString = "...............................";
+	char buttonStateBuff[32];
+	buttonString.toCharArray(buttonStateBuff, 32);
+	buttonStateBuff[30] = EOT;
+
+	// Commencing header transmission
+	rfAudio.transmit();
+	radio.write(buttonStateBuff, 32);
+
+	// Closing audio transmission
+	rfAudio.receive();
+	return;
 }
 
-void transmitButtonReading(String buttonState){
-     if (buttonState == "0000"){
-        if (buttonCleared){
-            return;
-        }
-        else{
-            buttonCleared = HIGH;
-        }
-     }
-     else{
-        buttonCleared = LOW;
-     }
-     
-     rfAudio.transmit();
-     const String buttonString = ".<ButtonActn>" + buttonState + "</ButtonActn>.";
-     char buttonStateBuff[32];
-     buttonString.toCharArray(buttonStateBuff, 32);
-     buttonStateBuff[0] = STX;
-     buttonStateBuff[30] = EOT;
-     radio.write(buttonStateBuff, 32);
-     rfAudio.receive();
+/*
+	Data format is STX<inpt>0000000000000000</inpt>EOT
+	1 or 0 value of every numerical bit represents pressed of not-pressed state
+	of each button. The first numerical bit represents key '0', Second on 
+	represents key '1' and so on. 11th and 13th to 16th bit is not used. 
+	
+*/
+
+void transmitButtonSignal(String buttonState)
+{
+	// Switching to transmission mode
+	rfAudio.transmit();
+	const String buttonString = ".<inpt>" + buttonState + "</inpt>.";
+	
+	char buttonStateBuff[32];
+	buttonString.toCharArray(buttonStateBuff, 32);
+	buttonStateBuff[0] = STX;
+	buttonStateBuff[30] = EOT;
+
+	Serial.println("Sending Signal: " + String(buttonStateBuff) + "Size: " + sizeof(buttonStateBuff));
+
+	// Commensing button press signal transmission
+	radio.write(buttonStateBuff, 32);
+
+	// Closing transmission mode
+	rfAudio.receive();
 }
 
+/*
+	Button handler function
+*/
 
-void HandleButtons(){
-  boolean buttonXState = !digitalRead(btnX);
-  boolean buttonYState = !digitalRead(btnY);
-  boolean buttonAState = !digitalRead(btnA);
-  boolean buttonBState = !digitalRead(btnB);
+void HandleButtons(KeypadEvent key)
+{
+	// Button state array
+	char buttonState[] = "0000000000000000";
 
-  char buttonState[] = {'0','0','0','0'};
-  
-  if (buttonXState){
-    buttonState[0] = '1';
-  }
-  else{
-    buttonState[0] = '0';
-  }
-
-  if (buttonYState){
-    buttonState[1] = '1';
-  }
-  else{
-    buttonState[1] = '0';
-  }
-
-  if (buttonAState){
-    buttonState[2] = '1';
-  }
-  else{
-    buttonState[2] = '0';
-  }
-  
-  if (buttonBState){
-    buttonState[3] = '1';
-  }
-  else{
-    buttonState[3] = '0';
-  }
-  String stateString(buttonState);
-  transmitButtonReading(stateString);
+	switch (keypad.getState())
+	{
+	case PRESSED:
+	{
+		switch (key)
+		{
+		case '0':
+			buttonState[0] = '1';
+			break;
+		case '1':
+			buttonState[1] = '1';
+			break;
+		case '2':
+			buttonState[2] = '1';
+			break;
+		case '3':
+			buttonState[3] = '1';
+			break;
+		case '4':
+			buttonState[4] = '1';
+			break;
+		case '5':
+			buttonState[5] = '1';
+			break;
+		case '6':
+			buttonState[6] = '1';
+			break;
+		case '7':
+			buttonState[7] = '1';
+			break;
+		case '8':
+			buttonState[8] = '1';
+			break;
+		case '9':
+			buttonState[9] = '1';
+			break;
+		case '#':
+			buttonState[11] = '1';
+			break;
+		}
+		String stateString(buttonState);
+		transmitButtonSignal(stateString);
+		break;
+	}
+	case RELEASED:
+		if (key == '*')
+		{
+			EndAudioTransmission();
+			break;
+		}
+	case HOLD:
+		if (key == '*')
+		{
+			StartAudioStransmission();
+			break;
+		}
+	}
 }
 
-void loop() {
-  HandleButtons();
-  delay(50);
+/*
+	Bootstraping all necessary components
+*/
+
+void setup()
+{
+	Serial.begin(115200); // Enable Arduino serial library
+
+	printf_begin();							// Radio library uses printf to output debug info
+	radio.begin();							// Must start the radio here, only if we want to print debug info
+	rfAudio.begin();						// Start up the radio and audio libraries
+	keypad.addEventListener(HandleButtons); // Add an event listener for this keypad
+}
+
+void loop()
+{
+	char key = keypad.getKey();
+
+	if (key)
+	{
+		Serial.println(key);
+	}
+	delay(50);
 }

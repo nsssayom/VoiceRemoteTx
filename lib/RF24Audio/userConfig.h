@@ -23,7 +23,7 @@
 
 /***************** Optional/Advanced User Variables ******/
 
-//#define MANUAL_BUTTON_HANDLING			  // Disables button handling via timer0. Allow users to customize button handling
+#define MANUAL_BUTTON_HANDLING			          // Disables button handling via timer0. Allow users to customize button handling
 #define TX_PIN A1                             // Button pin to trigger recording & transmission
 #define VOL_UP_PIN A2                         // Pin for external volume control
 #define VOL_DN_PIN A3                         // Pin for external volume control
