@@ -110,8 +110,19 @@ Follow the [official documentation](https://docs.platformio.org/en/latest/integr
 Upon connecting the board and configuring it correctly, Open VS Code command pallette with pressing <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd>.
 
 Use the `PlatformIO: Upload` command to upload the code to the board.
+
+## Data Format
+
+The buffer size for data transfer is 32 bit. Upon every button press a 32 bit packet will be transmitted. Audio transmission will be achieved using multiple 32 bit packets. A header packet will indicate the commencement of an audio transmission and a stop packet will symbolize the end.
+
+### Button Signal Format
+
+| Character Index | 0 | 1-6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23-29 | 30 | 31 |
+|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|
+| Character | ␂ | &lt;inpt>| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | &lt;/inpt>| ␄ |
 ___
+
 ##### Footnotes
 
-<a name="footnote1">1</a>: Declared in code</br>
-<a name="footnote2">2</a>: Originally D10 was used. But that pin was damaged later.
+<a name="footnote1">[1]</a> Declared in code</br>
+<a name="footnote2">[2]</a> Originally D10 was used. But that pin was damaged later.
