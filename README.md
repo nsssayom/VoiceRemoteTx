@@ -119,15 +119,15 @@ The buffer size for data transfer is 32 bit. Upon every button press a 32 bit pa
 
 The 32 bit button signal packet will be of following structure:
 
-| Character Index | 0 | 1-6 | 7-22 | 23-29 | 30 | 31 |
+| Character index | 0 | 1-6 | 7-22 | 23-29 | 30 | 31 |
 |--|--|--|--|--|--|--|
 | Character | ␂ | &lt;inpt>| 0 or 1 | &lt;/inpt>| ␄ | Not used yet |
 
 > Assuming a 0 based index system.
 
-According to the use case of this remote, only one button press can be registered at a time. So, any one of the characters from index `7` to `22` would be `1` and the rest would be `0`. The character set to `1` would symbolize the button being pressed.
+According to the use case of this remote, only one button press can be registered at a time. So, any one of the characters from index 7 to 22 would be 1 and the rest would be 0. The character set to 1 would symbolize the button being pressed.
 
-| Character at Index set to `1`| Corresponding Button |
+| Character at index set to 1 | Corresponding button |
 |--|--|
 | 7 | 0 |
 | 8 | 1 |
@@ -140,6 +140,40 @@ According to the use case of this remote, only one button press can be registere
 | 15 | 8 |
 | 16 | 9 |
 | 18 | # |
+
+Characters at index 17 and 19-22 are not used currently and could be used in later versions for more buttons, if necessary.  
+
+### Audio Signal Format
+
+Audio transmissions are conducted using three kind of packets. All of them has 32 bits.
+
+1. Audio Header Packet
+2. Audio Packet
+3. Audio Footer Packet
+
+#### Audio Header Packet
+
+This packet structure is following:
+
+| Character index | 0 | 1-30 | 31 |
+|--|--|--|--|
+| Character | ␂ | . | Not used yet |
+
+Example: `␂..............................`
+
+#### Audio Packet
+
+These are analog audio data. So, these packets are expected to nothing more than gibberish containing various printable or/and non-printable ASCII characters. These packets would need further processing from the receiver end.
+
+#### Audio Footer Packet
+
+This packet structure is following:
+
+| Character index | 0-29 | 30 | 31 |
+|--|--|--|--|
+| Character | . | ␄ | Not used yet |
+
+Example: `..............................␄`
 ___
 
 ##### Footnotes
