@@ -117,9 +117,29 @@ The buffer size for data transfer is 32 bit. Upon every button press a 32 bit pa
 
 ### Button Signal Format
 
-| Character Index | 0 | 1-6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23-29 | 30 | 31 |
-|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|
-| Character | ␂ | &lt;inpt>| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | &lt;/inpt>| ␄ |
+The 32 bit button signal packet will be of following structure:
+
+| Character Index | 0 | 1-6 | 7-22 | 23-29 | 30 | 31 |
+|--|--|--|--|--|--|--|
+| Character | ␂ | &lt;inpt>| 0 or 1 | &lt;/inpt>| ␄ | Not used yet |
+
+> Assuming a 0 based index system.
+
+According to the use case of this remote, only one button press can be registered at a time. So, any one of the characters from index `7` to `22` would be `1` and the rest would be `0`. The character set to `1` would symbolize the button being pressed.
+
+| Character at Index set to `1`| Corresponding Button |
+|--|--|
+| 7 | 0 |
+| 8 | 1 |
+| 9 | 2 |
+| 10 | 3 |
+| 11 | 4 |
+| 12 | 5 |
+| 13 | 6 |
+| 14 | 7 |
+| 15 | 8 |
+| 16 | 9 |
+| 18 | # |
 ___
 
 ##### Footnotes
