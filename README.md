@@ -89,12 +89,21 @@ The stage II out would be connected to A0 pin of the Arduino.
 | Output | AO |
 | GND | GND |
 
+High level block diagram of the transmitter system may further clarify the mechanism.
+
+|<img src="./docs/images/transmitter-block.png" width="700">|
+|:--:|
+|*Block diagram of the Transmitter*
+
 ### Sample Hardware
 
+|<img src="./docs/images/transmitter.jpg" width="700">|
+|:--:|
+|*Labeled Figure of a Hardware Implementation*|
 
 ## Loading Sketch
 
-> This project is developed and tested in Debian Buster machine. For all standard Debian and Ubuntu based systems following instructions are expected to work.
+> This project is developed and tested in [Debian Buster](https://www.debian.org/releases/buster/) machine. For all standard Debian and Ubuntu based systems following instructions are expected to work.
 
 
 ### Install VS Code
@@ -120,6 +129,18 @@ Launch VS Code Quick Open ( <kbd>Ctrl</kbd> + <kbd>P</kbd> ), paste the followin
 ```bash
 ext install platformio.platformio-ide
 ```
+>Arduino IDE is also one of its dependency. install it from [SnapCraft](https://snapcraft.io/code) with the following command:
+>
+>```bash
+>$ sudo snap install arduino
+>```
+>
+>If facing any problem to upload code to device, these commands may faix it.
+>
+>```bash
+>$ sudo usermod -a -G dialout $USER
+>$ arduino.pip install requests
+>```
 
 ### Configuring PlatformIO  
 
