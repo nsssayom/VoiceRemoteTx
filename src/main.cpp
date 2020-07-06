@@ -40,7 +40,7 @@ char keys[rows][cols] = {
 	{'4', '5', '6'},
 	{'7', '8', '9'},
 	{'*', '0', '#'}};
-byte rowPins[rows] = {9, A4, 5, 6}; //connect to the row pinouts of the keypad
+byte rowPins[rows] = {9, A1, 5, 6}; //connect to the row pinouts of the keypad
 byte colPins[cols] = {2, 3, 4};		//connect to the column pinouts of the keypad
 Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, rows, cols);
 
@@ -56,16 +56,22 @@ volatile byte voiceState = LOW;
 
 void StartAudioStransmission()
 {
-	Serial.println("Transmission Starting...");
+	//delay(20);
 	rfAudio.transmit();
 
 	const String buttonString = "...............................";
 	char buttonStateBuff[32];
 	buttonString.toCharArray(buttonStateBuff, 32);
 	buttonStateBuff[0] = STX;
-	radio.write(buttonStateBuff, 32);
-	delay(20);
-
+	
+	if(radio.write(buttonStateBuff, 32)){
+		Serial.println("Transmission Started");
+	}
+	else
+	{
+		Serial.println("Transmission Beginning Failed");
+	}
+	//delay(20);
 	rfAudio.broadcast(1);
 	return;
 }
@@ -76,15 +82,13 @@ void StartAudioStransmission()
 
 void EndAudioTransmission()
 {
-	Serial.println("Transmission Terminating...");
-	rfAudio.receive();
 	delay(20);
-
+	rfAudio.receive();
 	/*
 		Audio transmission header is EOT..............................
 		Audio signal will be followed by this character sequence.
 	*/
-
+	delay(20);
 	const String buttonString = "...............................";
 	char buttonStateBuff[32];
 	buttonString.toCharArray(buttonStateBuff, 32);
@@ -92,8 +96,13 @@ void EndAudioTransmission()
 
 	// Commencing header transmission
 	rfAudio.transmit();
-	radio.write(buttonStateBuff, 32);
-
+	if (radio.write(buttonStateBuff, 32)){
+		Serial.println("Transmission Terminated");
+	}
+	else{
+		Serial.println("Transmission Termination failed");
+	}
+	//delay(10);
 	// Closing audio transmission
 	rfAudio.receive();
 	return;
@@ -108,9 +117,7 @@ void EndAudioTransmission()
 */
 
 void transmitButtonSignal(String buttonState)
-{
-	// Switching to transmission mode
-	rfAudio.transmit();
+{	
 	const String buttonString = ".<inpt>" + buttonState + "</inpt>.";
 	
 	char buttonStateBuff[32];
@@ -118,11 +125,17 @@ void transmitButtonSignal(String buttonState)
 	buttonStateBuff[0] = STX;
 	buttonStateBuff[30] = EOT;
 
-	Serial.println("Sending Signal: " + String(buttonStateBuff) + "Size: " + sizeof(buttonStateBuff));
-
+	// Switching to transmission mode
+	rfAudio.transmit();
 	// Commensing button press signal transmission
-	radio.write(buttonStateBuff, 32);
 
+	if (radio.write(buttonStateBuff, 32)){
+		Serial.println("Signal Sending Success: " + String(buttonStateBuff) + "Size: " + sizeof(buttonStateBuff));
+	}
+	else{
+		Serial.println("Signal Sending Failed: " + String(buttonStateBuff) + "Size: " + sizeof(buttonStateBuff));
+	}
+	
 	// Closing transmission mode
 	rfAudio.receive();
 }
@@ -172,6 +185,10 @@ void HandleButtons(KeypadEvent key)
 		case '9':
 			buttonState[9] = '1';
 			break;
+		case '*':
+			return;
+			//buttonState[10] = '1';
+			//break;
 		case '#':
 			buttonState[11] = '1';
 			break;
@@ -183,12 +200,14 @@ void HandleButtons(KeypadEvent key)
 	case RELEASED:
 		if (key == '*')
 		{
+			Serial.println("Event Log: Audio Button Released");
 			EndAudioTransmission();
 			break;
 		}
 	case HOLD:
 		if (key == '*')
 		{
+			Serial.println("Event Log: Audio Button Held");
 			StartAudioStransmission();
 			break;
 		}
@@ -206,16 +225,13 @@ void setup()
 	printf_begin();							// Radio library uses printf to output debug info
 	radio.begin();							// Must start the radio here, only if we want to print debug info
 	rfAudio.begin();						// Start up the radio and audio libraries
+	keypad.setDebounceTime(10);
 	keypad.addEventListener(HandleButtons); // Add an event listener for this keypad
+	radio.printDetails();
 }
 
 void loop()
 {
 	char key = keypad.getKey();
-
-	if (key)
-	{
-		Serial.println(key);
-	}
-	delay(50);
+	if (key) Serial.println(key);
 }
