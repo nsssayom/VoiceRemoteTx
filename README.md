@@ -41,11 +41,50 @@ Keypad pins will be connected with the following arduino pins:
 | C2 | D3 |
 | C3 | D4 |
 
-### Interfacing Microphone Module with MCU
+### Interfacing Microphone with MCU
 
-The microphone (or preamp) out should be connected to A0 pin of the Arduino.
+Electret microphones are used in this project for voice input. Electret microphone can be very sensitive, very durable, extremely compact in size and has low power requirements. Electret microphones are used in very many applications where small and inexpensive microphones with good performance characteristics are needed. But the signal created by the mic itself is very low and hence needs amplification. In this project, the microphone signal was amplified in two stages.
 
-| Microphone (or Preamp) Pin | Arduino Pin |
+#### Microphone
+
+The electret is a modified version of the classic capacitor (or condenser) microphone, which exploits changes in capacitance due to mechanical vibrations to produce voltage variations proportional to sound waves. Typical electret condenser microphone capsule is a 2 terminal device (there are also 3 pin capsules) which approximates to a current source when biassed with around 1-9 volt and routinely consumes less than half a milliamp.
+
+|<img src="./docs/images/mic-pinout.jpg" width="300">|
+| :-: |
+| *Pinout of Electret Microphone* |
+
+#### LM358 Microphone Preamplifier (Amplifier Stage I)
+
+LM358 is a high gain, internally frequency compensated, operational amplifier specifically designed to operate from a single power source over a wide range of voltages.
+
+|<img src="./docs/images/lm358-pinout.png" width="400">|
+| :-: |
+| *Pinout of LM-358* |
+
+Complete circuit diagram of the preamp is following:
+
+<img src="./docs/images/lm358-preamp.png" width="700">
+
+The **V_OUT** terminal can used to drive in-ear headphones if necessary to test. **V_OUT_UC** terminal output will be passed to [stage II](#LM386-Audio-Amplifier-Amplifier-Stage-II) for further amplification.
+
+#### LM386 Audio Amplifier (Amplifier Stage II)
+
+<img src="./docs/images/lm386-amplifier.png" width="300">
+
+LM386 Audio Amplifier Module has 4 input pins and an output wiring block with GND and OUT.
+
+Input pins connections are shown below.
+
+| Stage II input Pin | Stage I Terminal | Arduino Pin |
+|--|--|--|
+|Vcc|X|5V|
+|IN|Stage I V_OUT_UC|X|
+|GND (audio) |X|GND|
+|GND|X|GND|
+
+The stage II out would be connected to A0 pin of the Arduino.
+
+| Stage II Output Pin | Arduino Pin |
 |--|--|
 | Output | AO |
 | GND | GND |
