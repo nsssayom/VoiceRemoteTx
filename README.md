@@ -91,15 +91,13 @@ The stage II out would be connected to A0 pin of the Arduino.
 
 High level block diagram of the transmitter system may further clarify the mechanism.
 
-|<img src="./docs/images/transmitter-block.png" width="700">|
-|:--:|
-|*Block diagram of the Transmitter*
+<img src="./docs/images/transmitter-block.png" width="700">
 
 ### Sample Hardware
 
-|<img src="./docs/images/Transmitter.jpg" width="700">|
-|:--:|
-|*Labeled Figure of a Hardware Implementation*|
+A labeled Figure of the hardware implementation.
+
+<img src="./docs/images/Transmitter.jpg" width="700">
 
 ## Loading Sketch
 
