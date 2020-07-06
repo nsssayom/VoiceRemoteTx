@@ -89,6 +89,9 @@ The stage II out would be connected to A0 pin of the Arduino.
 | Output | AO |
 | GND | GND |
 
+### Sample Hardware
+
+
 ## Loading Sketch
 
 > This project is developed and tested in Debian Buster machine. For all standard Debian and Ubuntu based systems following instructions are expected to work.
@@ -168,17 +171,17 @@ According to the use case of this remote, only one button press can be registere
 
 | Character at index set to 1 | Corresponding button |
 |--|--|
-| 7 | 0 |
-| 8 | 1 |
-| 9 | 2 |
-| 10 | 3 |
-| 11 | 4 |
-| 12 | 5 |
-| 13 | 6 |
-| 14 | 7 |
-| 15 | 8 |
-| 16 | 9 |
-| 18 | # |
+| 7 | <kbd>0</kbd> |
+| 8 | <kbd>1</kbd> |
+| 9 | <kbd>2</kbd> |
+| 10 | <kbd>3</kbd> |
+| 11 | <kbd>4</kbd> |
+| 12 | <kbd>5</kbd> |
+| 13 | <kbd>6</kbd> |
+| 14 | <kbd>7</kbd> |
+| 15 | <kbd>8</kbd> |
+| 16 | <kbd>9</kbd> |
+| 18 | <kbd>#</kbd> |
 
 Characters at index 17 and 19-22 are not used currently and could be used in later versions for more buttons, if necessary.  
 
@@ -189,6 +192,8 @@ Characters at index 17 and 19-22 are not used currently and could be used in lat
 >`␂<inpt>1000000000010000</inpt>␄` would mean button <kbd>#</kbd> is pressed.
 
 ### Audio Signal Format
+
+>The <kbd>*</kbd> button on the keypad would work as **PTT (Push to Talk)** and establish audio transmission during the time it is held.
 
 Audio transmissions are conducted using three kind of packets. All of them has 32 bits.
 
@@ -204,7 +209,7 @@ This packet structure is following:
 |--|--|--|--|
 | Character | ␂ | . | Not used yet |
 
-Example: `␂..............................`
+>Example: `␂..............................`
 
 #### Audio Packet
 
@@ -218,10 +223,15 @@ This packet structure is following:
 |--|--|--|--|
 | Character | . | ␄ | Not used yet |
 
-Example: `..............................␄`
+>Example: `..............................␄`
+
+
+
 ___
 
 ##### Footnotes
 
 <a name="footnote1">[1]</a> Declared in code</br>
-<a name="footnote2">[2]</a> Originally D10 was used. But that pin was damaged later.
+<a name="footnote2">[2]</a> Originally D10 was used. But that pin was damaged later.</br>
+[3] ␂ is ASCII Character (02)<sub>10</sub></br>
+[4] ␄ is ASCII Character (04)<sub>10</sub>
