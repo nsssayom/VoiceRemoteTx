@@ -182,6 +182,12 @@ According to the use case of this remote, only one button press can be registere
 
 Characters at index 17 and 19-22 are not used currently and could be used in later versions for more buttons, if necessary.  
 
+>Example:
+>
+>`␂<inpt>1000000000000000</inpt>␄` would mean button <kbd>0</kbd> is pressed.
+>
+>`␂<inpt>1000000000010000</inpt>␄` would mean button <kbd>#</kbd> is pressed.
+
 ### Audio Signal Format
 
 Audio transmissions are conducted using three kind of packets. All of them has 32 bits.
