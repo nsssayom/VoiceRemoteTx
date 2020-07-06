@@ -174,11 +174,11 @@ Use the `PlatformIO: Upload` command to upload the code to the board.
 
 ## Data Format
 
-The buffer size for data transfer is 32 bit. Upon every button press a 32 bit packet will be transmitted. Audio transmission will be achieved using multiple 32 bit packets. A header packet will indicate the commencement of an audio transmission and a stop packet will symbolize the end.
+The buffer size for data transfer is 32 byte. Upon every button press a 32 byte packet will be transmitted. Audio transmission will be achieved using multiple 32 byte packets. A header packet will indicate the commencement of an audio transmission and a stop packet will symbolize the end.
 
 ### Button Signal Format
 
-The 32 bit button signal packet will be of following structure:
+The 32 byte button signal packet will be of following structure:
 
 | Character index | 0 | 1-6 | 7-22 | 23-29 | 30 | 31 |
 |--|--|--|--|--|--|--|
@@ -242,7 +242,7 @@ This packet structure is following:
 |--|--|--|--|
 | Character | . | ␄ | Not used yet |
 
->Example: `..............................␄`
+>Example: `..............................␄` 
 
 ## References
 
