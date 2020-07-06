@@ -91,7 +91,7 @@ The stage II out would be connected to A0 pin of the Arduino.
 
 High level block diagram of the transmitter system may further clarify the mechanism.
 
-<img src="./docs/images/transmitter-block.png" width="400">
+<img src="./docs/images/transmitter-block.png" width="500">
 
 ### Sample Hardware
 
@@ -244,8 +244,16 @@ This packet structure is following:
 
 >Example: `..............................␄`
 
+## References
 
-
+1. How nRF24L01+ Wireless Module Works & Interface with Arduino, [Last Minute Engineering](https://lastminuteengineers.com/nrf24l01-arduino-wireless-communication/)
+2. Tomi Engdahl, Powering Microphones, [ePanorama.net](https://www.epanorama.net/circuits/microphone_powering.html)
+3. Dimitar Kovachev, LM358 microphone amplifier, [Low voltage. Mostly harmless…](https://lowvoltage.wordpress.com/2011/05/21/lm358-mic-amp/)
+4. Texas Instruments, LMx58-N Low-Power, Dual-Operational Amplifiers [Datasheet](https://www.ti.com/lit/ds/symlink/lm358-n.pdf?ts=1594025525189&ref_url=https%253A%252F%252Fwww.google.com%252F)
+5. Texas Instruments, LM386 Low Voltage Audio Power Amplifier
+[Datasheet](https://www.ti.com/lit/ds/symlink/lm386.pdf)
+6. TMRh20 2020, RF24 - Optimized high speed nRF24L01+ driver [Documentation](http://tmrh20.github.io/RF24/)
+7. TMRh20 2020, RF24Audio - Realtime Audio Streaming Library for Arduino [Documentation](http://tmrh20.github.io/RF24Audio/)
 ___
 
 ##### Footnotes
