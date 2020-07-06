@@ -97,7 +97,7 @@ High level block diagram of the transmitter system may further clarify the mecha
 
 ### Sample Hardware
 
-|<img src="./docs/images/transmitter.jpg" width="700">|
+|<img src="./docs/images/Transmitter.jpg" width="700">|
 |:--:|
 |*Labeled Figure of a Hardware Implementation*|
 
