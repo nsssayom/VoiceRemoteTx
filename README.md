@@ -139,6 +139,11 @@ ext install platformio.platformio-ide
 >$ sudo usermod -a -G dialout $USER
 >$ arduino.pip install requests
 >```
+>On Arch based systems:
+>
+>```bash
+>$ sudo uucp -a -G dialout $USER
+>```
 
 ### Configuring PlatformIO  
 
