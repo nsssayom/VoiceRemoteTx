@@ -7,7 +7,7 @@
  // Maximum Range: Sample rate 16000, RF_SPEED RF24_250KBPS
  // Maximum Quality: Sample rate 44000, RF_SPEED RF24_2MBPS
 
-#define SAMPLE_RATE 24000                     // The sample rate to use for transferring audio samples  Note: 44khz+ sample rate requires 8-bits per sample
+#define SAMPLE_RATE 12000                     // The sample rate to use for transferring audio samples  Note: 44khz+ sample rate requires 8-bits per sample
 #define RF_SPEED RF24_1MBPS                   // RF24_250KBPS will do 13-20khz+ sample rate, RF24_1MBPS up to 24-44khz+, RF24_2MBPS for higher. These are not limits, just a guide.
 #define ANALOG_PIN A0                         // The pin that analog readings will be taken from (microphone pin)
 
